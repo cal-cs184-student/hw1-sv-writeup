@@ -49,10 +49,21 @@
 
 		<h2>Overview</h2>
 		Give a high-level overview of what you implemented in this homework. Think about what you've built as a whole. Share your thoughts on what interesting things you've learned from completing the homework.
-
+		In this homework, I worked to implement several rendering techniques that included rasterization, sampling, and texture mapping. 
+		While listening to the lectures was helpful, I thought that being able to implement the functions themselves was extremely valuable in learning the concepts.
+		The concept that I think I learned the most via manual implementation was barycentric interpolation, as I could see how significant its impact was on rendering the colors and textures on images.
+		While implementing the functions I also gained a stronger understanding of the underlying foundations in linear algebra and matrix/vector operations, which was helpful as well.
+		
 		<h2>Task 1: Drawing Single-Color Triangles</h2>
 		Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
-		
+Walk through how you rasterize triangles in your own words.
+			To rasterize a triangle, fill every sample point that lies inside the triangle defined by the vertices \((x_0,y_0)\), \((x_1,y_1)\), and \((x_2,y_2)\) with the given color \(C\). For each sample point \((p_x,p_y)\), we calculate the signed 2D cross product between each edge of the triangle and the vector from the edge's starting vertex to the sample point. 
+			For example: $$ (x_1-x_0)(p_y-y_0)-(y_1-y_0)(p_x-x_0) $$
+
+If all three cross products have the same sign in that they are either all positive or all negative (including zero) then the sample point lies inside or on the boundary of the triangle, so we fill the corresponding pixel.
+Explain how your algorithm is no worse than one that checks each sample within the bounding box of the triangle. The bounding box of the triangle is defined as the smallest rectangle that can be drawn whilst ensuring that the entire triangle is within it.
+			Rather than taking a sample pixel from the dimensions of the entire window, I only sample from the minimum to the maximum x and y values given in the parameters. This is done with the max() and min() functions, as well as floor() and ceil() functions to turn the floats into ints.
+Show a png screenshot of basic/test4.svg with the default viewing parameters and with the pixel inspector centered on an interesting part of the scene.
 		<p>Here is an example 2x2 gridlike structure using an HTML table. Each <b>tr</b> is a row and each <b>td</b> is a column in that row. You might find this useful for framing and showing your result images in an organized fashion.</p>
 		<div style="display: flex; flex-direction: column; align-items: center;">
 			<table style="width: 100%; text-align: center; border-collapse: collapse;">
