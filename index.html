@@ -65,7 +65,22 @@
 			<figcaption>You can add images with captions!</figcaption>
 		</figure>
 
-			
+	
+		
+		<h2>Task 2: Antialiasing by Supersampling</h2>
+I first began by repurposing the algorithm from the original rasterize_triangle method, specifically iterating through the triangle's bounding box and using cross products to determine whether a sample lies inside the triangle. 
+			To implement supersampling, I subdivided each pixel into multiple samples, with the number of samples determined by the sample_rate member variable. 
+			For each pixel, I iterate through a sqrt(sample_rate) * sqrt(sample_rate) grid of samples. The position of each sample is calculated using the center of each subpixel, rather than using the center of the entire pixel. 
+			I then use the cross products to determine whether each sample lies inside the triangle. If it does, I store the triangle's color in the corresponding position in sample_buffer. 
+			The sample index is calculated using the pixel's (x, y) coordinates and the sample's (sx, sy) coordinates within that pixel.
+
+			The sample_buffer is the main data structure I use for supersampling. Instead of storing one color per pixel, it stores width * height * sample_rate colors, allowing each pixel to have multiple samples. 
+			I modified the buffer initialization and resizing in set_sample_rate(), and set_framebuffer_target() to account for the additional samples. 
+			After all the triangles have been rasterized, resolve_to_framebuffer() converts the supersampled image back into the normal framebuffer. 
+			For each pixel, I iterate through all of its samples, add their red, green, and blue components separately, and divide each component by sample_rate to calculate the average color. 
+			This averaged color is then written to the framebuffer. By using supersampling for each pixel, I am antialiasing as it smooths the jagged edges created when pixels are either considered inside or outside a triangle. 
+			Supersampling creates a gradient that softens the edges and strengthens the appearance of diagonal lines in triangles.
+
 		<p>Here is an example 2x2 gridlike structure using an HTML table. Each <b>tr</b> is a row and each <b>td</b> is a column in that row. You might find this useful for framing and showing your result images in an organized fashion.</p>
 		<div style="display: flex; flex-direction: column; align-items: center;">
 			<table style="width: 100%; text-align: center; border-collapse: collapse;">
@@ -91,10 +106,7 @@
 			  </tr>
 			</table>
 		</div>
-		
-		<h2>Task 2: Antialiasing by Supersampling</h2>
-		Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
-
+			
 		<h2>Task 3: Transforms</h2>
 		Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
 
