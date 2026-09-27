@@ -49,6 +49,7 @@
 		The concept that I think I learned the most via manual implementation was barycentric interpolation, as I could see how significant its impact was on rendering the colors and textures on images.
 		While implementing the functions I also gained a stronger understanding of the underlying foundations in linear algebra and matrix/vector operations, which was helpful as well.
 		
+		 	
 		<h2>Task 1: Drawing Single-Color Triangles</h2>
 		
 			To rasterize a triangle, fill every sample point that lies inside the triangle defined by the vertices \((x_0,y_0)\), \((x_1,y_1)\), and \((x_2,y_2)\) with the given color \(C\). For each sample point \((p_x,p_y)\), we calculate the signed 2D cross product between each edge of the triangle and the vector from the edge's starting vertex to the sample point. 
@@ -57,7 +58,7 @@
 			If all three cross products have the same sign in that they are either all positive or all negative (including zero) then the sample point lies inside or on the boundary of the triangle, so we fill the corresponding pixel.
 
 			
-			Rather than taking a sample pixel from the dimensions of the entire window, I only sample from the minimum to the maximum x and y values given in the parameters. This is done with the max() and min() functions, as well as floor() and ceil() functions to turn the floats into ints.
+			Rather than taking a sample pixel from the dimensions of the entire window, I only sample from the minimum to the maximum x and y values given in the parameters. This is done with the max() and min() functions, as well as <code>floor()</code> and <code>ceil()</code> functions to turn the floats into ints.
 
 			
 			<figure>
@@ -68,16 +69,16 @@
 	
 		
 		<h2>Task 2: Antialiasing by Supersampling</h2>
-I first began by repurposing the algorithm from the original rasterize_triangle method, specifically iterating through the triangle's bounding box and using cross products to determine whether a sample lies inside the triangle. 
-			To implement supersampling, I subdivided each pixel into multiple samples, with the number of samples determined by the sample_rate member variable. 
-			For each pixel, I iterate through a sqrt(sample_rate) * sqrt(sample_rate) grid of samples. The position of each sample is calculated using the center of each subpixel, rather than using the center of the entire pixel. 
-			I then use the cross products to determine whether each sample lies inside the triangle. If it does, I store the triangle's color in the corresponding position in sample_buffer. 
+I first began by repurposing the algorithm from the original <code>rasterize_triangle</code> method, specifically iterating through the triangle's bounding box and using cross products to determine whether a sample lies inside the triangle. 
+			To implement supersampling, I subdivided each pixel into multiple samples, with the number of samples determined by the <code>sample_rate</code> member variable. 
+			For each pixel, I iterate through a \(\sqrt{\mathrm{sample\_rate}}\times\sqrt{\mathrm{sample\_rate}}\) grid of samples. The position of each sample is calculated using the center of each subpixel, rather than using the center of the entire pixel. 
+			I then use the cross products to determine whether each sample lies inside the triangle. If it does, I store the triangle's color in the corresponding position in <code>sample_buffer</code>. 
 			The sample index is calculated using the pixel's (x, y) coordinates and the sample's (sx, sy) coordinates within that pixel.
 
-			The sample_buffer is the main data structure I use for supersampling. Instead of storing one color per pixel, it stores width * height * sample_rate colors, allowing each pixel to have multiple samples. 
-			I modified the buffer initialization and resizing in set_sample_rate(), and set_framebuffer_target() to account for the additional samples. 
-			After all the triangles have been rasterized, resolve_to_framebuffer() converts the supersampled image back into the normal framebuffer. 
-			For each pixel, I iterate through all of its samples, add their red, green, and blue components separately, and divide each component by sample_rate to calculate the average color. 
+			The <code>sample_buffer</code> is the main data structure I use for supersampling. Instead of storing one color per pixel, it stores \(\mathrm{width}\times\mathrm{height}\times\mathrm{sample\_rate}\) colors, allowing each pixel to have multiple samples. 
+			I modified the buffer initialization and resizing in <code>set_sample_rate()</code>, and <code>set_framebuffer_target()</code> to account for the additional samples. 
+			After all the triangles have been rasterized, <code>resolve_to_framebuffer()</code> converts the supersampled image back into the normal framebuffer. 
+			For each pixel, I iterate through all of its samples, add their red, green, and blue components separately, and divide each component by <code>sample_rate</code> to calculate the average color. 
 			This averaged color is then written to the framebuffer. By using supersampling for each pixel, I am antialiasing as it smooths the jagged edges created when pixels are either considered inside or outside a triangle. 
 			Supersampling creates a gradient that softens the edges and strengthens the appearance of diagonal lines in triangles.
 
@@ -111,7 +112,7 @@ I updated robot.svg so that cubeman is in the midst of doing a cartwheel. To do 
 		</figure>
 			
 			<h2>Task 4: Barycentric coordinates</h2>
-Barycentric coordinates are a format of coordinates where instead of an origin being (0,0) in an x-y plane, the three points of the triangle are designated with (1,0,0), (0,1,0), and (0,0,1), and other point can be expressed in the range of (0,1) with weighted values that add up to 1. As such, the center (barycenter) of the triangle is (1/3, 1/3, 1/3). 
+Barycentric coordinates are a format of coordinates where instead of an origin being (0,0) in an x-y plane, the three points of the triangle are designated with \((1,0,0)\), \((0,1,0)\), and \((0,0,1)\), and other point can be expressed in the range of (0,1) with weighted values that add up to 1. As such, the center (barycenter) of the triangle is \((1/3,1/3,1/3)\). 
 
 This is helpful when mapping colors or textures that are correlated with the triangle’s vertices, in which barycentric coordinates can designate how much each vertex’s value is weighted and result in a smooth transition between different mappings. For example, the triangle below sets the three vertices as the different colors of blue, purple, and yellow. Every other point within the triangle is colored based off the barycentric coordinates’ corresponding values about the vertices’ colors.
 
@@ -134,8 +135,8 @@ This is helpful when mapping colors or textures that are correlated with the tri
 			
 			
 			<h2>Task 5: "Pixel sampling" for texture mapping</h2>
-I first began by repurposing the algorithm from the original rasterize_triangle method, specifically iterating through the triangle's bounding box and using cross products to determine whether a sample lies inside the triangle. I then use these cross products to calculate the barycentric weights of the sample point, which are used to interpolate the u and v texture coordinates from the three vertices. These coordinates determine the location in the texture from which to sample a color.
-For nearest-neighbor sampling, I use floor() to determine the texel corresponding to the interpolated (u, v) coordinate and return its color using get_texel().
+I first began by repurposing the algorithm from the original <code>rasterize_triangle</code> method, specifically iterating through the triangle's bounding box and using cross products to determine whether a sample lies inside the triangle. I then use these cross products to calculate the barycentric weights of the sample point, which are used to interpolate the u and v texture coordinates from the three vertices. These coordinates determine the location in the texture from which to sample a color.
+For nearest-neighbor sampling, I use <code>floor()</code> to determine the texel corresponding to the interpolated (u, v) coordinate and return its color using <code>get_texel()</code>.
 For bilinear sampling, I used the four texels surrounding the (u, v) coordinate. I used the fractional parts of the texture coordinates to weight the colors based on their distance from the sample point. First, I interpolated between the two pairs of texels horizontally and then interpolate between those results vertically.
 
 			<div style="display: flex; flex-direction: column; align-items: center;">
@@ -166,11 +167,13 @@ For bilinear sampling, I used the four texels surrounding the (u, v) coordinate.
 			When switching to bilinear sampling from nearest sampling, the lines within the map are noticeably smoother and appear straighter, in comparison to the more stark but jagged lines in nearest sampling. There will usually be large differences between the two methods when there are sharp or diagonal lines, or when there are gradients with color, both of which will appear more jagged with nearest sampling.
 
 		<h2>Task 6: "Level Sampling" with mipmaps for texture mapping</h2>
-Level sampling is used to determine which mipmap level should be sampled from, based on how much the texture coordinates change across a screen pixel. At L_ZERO, the mipmap level is set to 0, so the original full-resolution texture is sampled. At L_NEAREST, the mipmap level is rounded to the nearest available level. At L_LINEAR, the two closest mipmap levels are selected using floor() and ceil(), and their sampled colors are interpolated using the fractional part of the level.
-To determine the appropriate nonzero mipmap level, I calculate the texture coordinates at the current pixel and at neighboring screen positions one pixel to the right or (u+1, v) and one pixel below or (u, v+1) . I use the same barycentric interpolation used to calculate the original (u, v) coordinates. These neighboring coordinates are stored as p_dx_uv and p_dy_uv and are passed to get_level().
-In get_level(), I first calculate the UV differences between the neighboring samples and the original texture coordinate: dx = p_dx_uv - p_uv and dy = p_dy_uv - p_uv. I then scale the differences by the texture width and height to convert them from normalized texture coordinates into texel coordinates. Finally, I use the larger of the two vector magnitudes to determine the mipmap level:
+Level sampling is used to determine which mipmap level should be sampled from, based on how much the texture coordinates change across a screen pixel. At <code>L_ZERO</code>, the mipmap level is set to 0, so the original full-resolution texture is sampled. At <code>L_NEAREST</code>, the mipmap level is rounded to the nearest available level. At <code>L_LINEAR</code>, the two closest mipmap levels are selected using <code>floor()</code> and <code>ceil()</code>, and their sampled colors are interpolated using the fractional part of the level.
+To determine the appropriate nonzero mipmap level, I calculate the texture coordinates at the current pixel and at neighboring screen positions one pixel to the right and one pixel below. These correspond to the UV coordinates \((u+1,v)\) and \((u,v+1)\). I use the same barycentric interpolation used to calculate the original (u, v) coordinates. These neighboring coordinates are stored as <code>p_dx_uv</code> and <code>p_dy_uv</code> and are passed to <code>get_level()</code>.
+In <code>get_level()</code>, I first calculate the UV differences between the neighboring samples and the original texture coordinate: dx = <code>p_dx_uv</code> - p_uv and dy = <code>p_dy_uv</code> - p_uv. I then scale the differences by the texture width and height to convert them from normalized texture coordinates into texel coordinates. Finally, I use the larger of the two vector magnitudes to determine the mipmap level:
 			<li>
-\[ L = \log_2\left(\max\left(\sqrt{dx_x^2 + dx_y^2},\sqrt{dy_x^2 + dy_y^2}\right)\right) \] </li>
+<div class="math-display">
+				\[ L = \log_2\left(\max\left(\sqrt{dx_x^2 + dx_y^2},\sqrt{dy_x^2 + dy_y^2}\right)\right) \]
+			</div>
 This level is then used to select the appropriate mipmap level for texture sampling.
 
 					<div style="display: flex; flex-direction: column; align-items: center;">
@@ -198,26 +201,17 @@ This level is then used to select the appropriate mipmap level for texture sampl
 			</table>
 		</div>
 
-		<p>Antialiasing improves the larger the samples per pixel become. This is because more pixels are being considered which will make the resulting sample more cohesive within the image and reduce jagged, out of place pixels. However, as a result a larger number of samples per pixel will also cause the speed to decrease and memory usage to increase.
+		<p>Antialiasing improves as the number of samples per pixel increases. This is because more sample points are considered within each pixel, producing smoother edges and reducing jagged pixels. However, as a result a larger number of samples per pixel will also cause the speed to decrease and memory usage to increase.
 		</p>
 			
-		<p>Speed and memory usage are improved when using nearest pixel sampling rather than bilinear, since with bilinear pixel sampling more samples are being taken into account and more interpolations are needed, causing the speed to slow down. But similar to increasing the number of samples per pixel, using bilinear pixel sampling creates a smoother appearance in texture mappings due to more pixels being considered. 
+		<p>Speed and memory usage are improved when using nearest pixel sampling rather than bilinear, because nearest sampling retrieves one texel, while bilinear sampling uses four texels and performs additional interpolation. But similar to increasing the number of samples per pixel, using bilinear pixel sampling creates a smoother appearance in texture mappings due to more pixels being considered. 
 		</p>
 			<p>
-		Similarly, speed increases when nearest level and zero level sampling is used, as only one level needs to be considered rather than bilinear level sampling which needs more operations and levels. Memory usage remains the same across all three level sampling techniques since it uses the same mipmap storage.
+		Similarly, speed increases when nearest level and zero level sampling is used, while linear level sampling requires additional operations because it samples and interpolates between two mipmap levels. Memory usage remains the same across all three level sampling techniques since it uses the same mipmap storage.
 			</p>
 			
 		<h2>(Optional) Task 7: Extra Credit - Draw Something Creative!</h2>
 		Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
-
-		<h2>Additional Notes (please remove)</h2>
-		<ul>
-			<li>You can also add code if you'd like as so: <code>code code code</code></li>
-			<li>If you'd like to add math equations, 
-				<ul>
-					<li>You can write inline equations like so: \( a^2 + b^2 = c^2 \)</li>
-					<li>You can write display equations like so: \[ a^2 + b^2 = c^2 \]</li>
-				</ul>
 			</li>
 		</ul>
 		</div>
