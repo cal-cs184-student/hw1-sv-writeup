@@ -134,7 +134,36 @@ This is helpful when mapping colors or textures that are correlated with the tri
 			
 			
 			<h2>Task 5: "Pixel sampling" for texture mapping</h2>
-		Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+I first began by repurposing the algorithm from the original rasterize_triangle method, specifically iterating through the triangle's bounding box and using cross products to determine whether a sample lies inside the triangle. I then use these cross products to calculate the barycentric weights of the sample point, which are used to interpolate the u and v texture coordinates from the three vertices. These coordinates determine the location in the texture from which to sample a color.
+For nearest-neighbor sampling, I use floor() to determine the texel corresponding to the interpolated (u, v) coordinate and return its color using get_texel().
+For bilinear sampling, I used the four texels surrounding the (u, v) coordinate. I used the fractional parts of the texture coordinates to weight the colors based on their distance from the sample point. First, I interpolated between the two pairs of texels horizontally and then interpolate between those results vertically.
+
+			<div style="display: flex; flex-direction: column; align-items: center;">
+			<table style="width: 100%; text-align: center; border-collapse: collapse;">
+			  <tr>
+				<td style="text-align: center;">
+				  <img src="assets/task5nearest1pixel.png" width="400px"/>
+				  <figcaption>Map using nearest sampling, 1 sample per pixel</figcaption>
+				</td>
+				<td style="text-align: center;">
+				  <img src="assets/task5bilinear1pixel.png" width="400px"/>
+				  <figcaption>Map using bilinear sampling, 1 sample per pixel</figcaption>
+				</td>
+			  </tr>
+			  <tr>
+				<td style="text-align: center;">
+				  <img src="assets/task5nearest16pixel.png" width="400px"/>
+				  <figcaption>Map using nearest sampling, 16 samples per pixel</figcaption>
+				</td>
+				  <td style="text-align: center;">
+				  <img src="assets/task5bilinear16pixel.png" width="400px"/>
+				  <figcaption>Map using bilinear sampling, 16 samples per pixel</figcaption>
+				</td>
+			  </tr>
+			</table>
+		</div>
+
+			When switching to bilinear sampling from nearest sampling, the lines within the map are noticeably smoother and appear straighter, in comparison to the more stark but jagged lines in nearest sampling. There will usually be large differences between the two methods when there are sharp or diagonal lines, or when there are gradients with color, both of which will appear more jagged with nearest sampling.
 
 		<h2>Task 6: "Level Sampling" with mipmaps for texture mapping</h2>
 		Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
