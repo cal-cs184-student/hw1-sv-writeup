@@ -81,13 +81,12 @@ I first began by repurposing the algorithm from the original rasterize_triangle 
 			This averaged color is then written to the framebuffer. By using supersampling for each pixel, I am antialiasing as it smooths the jagged edges created when pixels are either considered inside or outside a triangle. 
 			Supersampling creates a gradient that softens the edges and strengthens the appearance of diagonal lines in triangles.
 
-		<p>test4.svg with the pixel inspector over a skinny triangle corner at sample rates 1, 4, and 16 respectively. The larger the sample rate, the smoother the corner becomes as a result of more subsections being used for supersampling, which makes smaller differences in the color between pixels.</p>
 		<div style="display: flex; flex-direction: column; align-items: center;">
 			<table style="width: 100%; text-align: center; border-collapse: collapse;">
 			  <tr>
 				<td style="text-align: center;">
 				  <img src="assets/task21.png" width="400px"/>
-				  <figcaption>test4.svg, with the pixel inspector focusing on the vertex of the triangle.</figcaption>
+				  <figcaption></figcaption>
 				</td>
 				<td style="text-align: center;">
 				  <img src="assets/task22.png" width="400px"/>
@@ -97,7 +96,7 @@ I first began by repurposing the algorithm from the original rasterize_triangle 
 			  <tr>
 				<td style="text-align: center;">
 				  <img src="assets/task23.png" width="400px"/>
-				  <figcaption></figcaption>
+				  <figcaption>test4.svg with the pixel inspector over a skinny triangle corner at sample rates 16, 4, and 1 respectively. The larger the sample rate, the smoother the corner becomes as a result of more subsections being used for supersampling, which makes smaller differences in the color between pixels.</figcaption>
 				</td>
 			  </tr>
 			</table>
