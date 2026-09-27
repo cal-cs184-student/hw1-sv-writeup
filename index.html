@@ -111,9 +111,29 @@ I updated robot.svg so that cubeman is in the midst of doing a cartwheel. To do 
 		</figure>
 			
 			<h2>Task 4: Barycentric coordinates</h2>
-		Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+Barycentric coordinates are a format of coordinates where instead of an origin being (0,0) in an x-y plane, the three points of the triangle are designated with (1,0,0), (0,1,0), and (0,0,1), and other point can be expressed in the range of (0,1) with weighted values that add up to 1. As such, the center (barycenter) of the triangle is (1/3, 1/3, 1/3). 
 
-		<h2>Task 5: "Pixel sampling" for texture mapping</h2>
+This is helpful when mapping colors or textures that are correlated with the triangle’s vertices, in which barycentric coordinates can designate how much each vertex’s value is weighted and result in a smooth transition between different mappings. For example, the triangle below sets the three vertices as the different colors of blue, purple, and yellow. Every other point within the triangle is colored based off the barycentric coordinates’ corresponding values about the vertices’ colors.
+
+			<div style="display: flex; flex-direction: column; align-items: center;">
+			<table style="width: 100%; text-align: center; border-collapse: collapse;">
+			  <tr>
+				<td style="text-align: center;">
+				  <img src="assets/task4triangle.png" width="400px"/>
+				  <figcaption>Example triangle colored using barycentric coordinates.</figcaption>
+				</td>
+			  </tr>
+			  <tr>
+				<td style="text-align: center;">
+				  <img src="assets/task4.png" width="400px"/>
+				  <figcaption>test7.svg, colored using barycentric coordinates.</figcaption>
+				</td>
+			  </tr>
+			</table>
+		</div>
+			
+			
+			<h2>Task 5: "Pixel sampling" for texture mapping</h2>
 		Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
 
 		<h2>Task 6: "Level Sampling" with mipmaps for texture mapping</h2>
