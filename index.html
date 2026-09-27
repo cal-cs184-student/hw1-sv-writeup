@@ -169,7 +169,8 @@ For bilinear sampling, I used the four texels surrounding the (u, v) coordinate.
 Level sampling is used to determine which mipmap level should be sampled from, based on how much the texture coordinates change across a screen pixel. At L_ZERO, the mipmap level is set to 0, so the original full-resolution texture is sampled. At L_NEAREST, the mipmap level is rounded to the nearest available level. At L_LINEAR, the two closest mipmap levels are selected using floor() and ceil(), and their sampled colors are interpolated using the fractional part of the level.
 To determine the appropriate nonzero mipmap level, I calculate the texture coordinates at the current pixel and at neighboring screen positions one pixel to the right or (u+1, v) and one pixel below or (u, v+1) . I use the same barycentric interpolation used to calculate the original (u, v) coordinates. These neighboring coordinates are stored as p_dx_uv and p_dy_uv and are passed to get_level().
 In get_level(), I first calculate the UV differences between the neighboring samples and the original texture coordinate: dx = p_dx_uv - p_uv and dy = p_dy_uv - p_uv. I then scale the differences by the texture width and height to convert them from normalized texture coordinates into texel coordinates. Finally, I use the larger of the two vector magnitudes to determine the mipmap level:
-( L = \log_2\left(\max\left(\sqrt{dx_x^2 + dx_y^2},\sqrt{dy_x^2 + dy_y^2}\right)\right) ) 
+			<li>
+\[ L = \log_2\left(\max\left(\sqrt{dx_x^2 + dx_y^2},\sqrt{dy_x^2 + dy_y^2}\right)\right) \] </li>
 This level is then used to select the appropriate mipmap level for texture sampling.
 
 					<div style="display: flex; flex-direction: column; align-items: center;">
@@ -197,14 +198,14 @@ This level is then used to select the appropriate mipmap level for texture sampl
 			</table>
 		</div>
 
-		Antialiasing improves the larger the samples per pixel become. This is because more pixels are being considered which will make the resulting sample more cohesive within the image and reduce jagged, out of place pixels. However, as a result a larger number of samples per pixel will also cause the speed to decrease and memory usage to increase.
-
+		<p>Antialiasing improves the larger the samples per pixel become. This is because more pixels are being considered which will make the resulting sample more cohesive within the image and reduce jagged, out of place pixels. However, as a result a larger number of samples per pixel will also cause the speed to decrease and memory usage to increase.
+		</p>
 			
-		Speed and memory usage are improved when using nearest pixel sampling rather than bilinear, since with bilinear pixel sampling more samples are being taken into account and more interpolations are needed, causing the speed to slow down. But similar to increasing the number of samples per pixel, using bilinear pixel sampling creates a smoother appearance in texture mappings due to more pixels being considered. 
-
-			
+		<p>Speed and memory usage are improved when using nearest pixel sampling rather than bilinear, since with bilinear pixel sampling more samples are being taken into account and more interpolations are needed, causing the speed to slow down. But similar to increasing the number of samples per pixel, using bilinear pixel sampling creates a smoother appearance in texture mappings due to more pixels being considered. 
+		</p>
+			<p>
 		Similarly, speed increases when nearest level and zero level sampling is used, as only one level needs to be considered rather than bilinear level sampling which needs more operations and levels. Memory usage remains the same across all three level sampling techniques since it uses the same mipmap storage.
-			
+			</p>
 			
 		<h2>(Optional) Task 7: Extra Credit - Draw Something Creative!</h2>
 		Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
